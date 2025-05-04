@@ -3,6 +3,7 @@ import torch
 import cv2
 import numpy as np
 from PIL import Image
+import matplotlib.pyplot as plt
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -45,9 +46,20 @@ if uploaded_file:
             ).squeeze()
 
         depth_map = prediction.cpu().numpy()
-        depth_map = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())
-        depth_img = (depth_map * 255).astype(np.uint8)
+        depth_map_norm = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())
+        depth_img = (depth_map_norm * 255).astype(np.uint8)
 
-        st.image(depth_img, caption="Estimated Depth Map", use_container_width=True)
+        st.subheader("Estimated Depth Map (Grayscale)")
+        st.image(depth_img, use_container_width=True)
+
+        st.subheader("Estimated Depth Map (Heatmap)")
+        fig, ax = plt.subplots()
+        heatmap = ax.imshow(depth_map_norm, cmap="inferno")
+        ax.set_title("Depth Heatmap (Near = Bright, Far = Dark)", fontsize=12)
+        cbar = plt.colorbar(heatmap, ax=ax, orientation="vertical")
+        cbar.set_label("Depth Intensity", rotation=270, labelpad=15)
+        cbar.ax.set_yticklabels(["Far", "", "", "", "", "", "Near"])
+        st.pyplot(fig)
+
     except Exception as e:
         st.error(f"Error processing image: {str(e)}")
