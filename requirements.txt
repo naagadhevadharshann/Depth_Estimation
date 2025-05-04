@@ -1,14 +1,7 @@
 streamlit
-torch
-torchvision
-opencv-python
-numpy
-pillow
-
-
-streamlit
-torch
-torchvision
-opencv-python
+torch==2.0.1+cpu
+torchvision==0.15.2+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+opencv-python-headless==4.9.0.80
 numpy
 pillow
