@@ -26,7 +26,7 @@ midas, transform = load_model()
 if midas is None or transform is None:
     st.stop()
 
-st.title("Depth Estimation using MiDaS")
+st.title("Depth Estimation")
 
 uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
 
