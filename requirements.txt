@@ -3,4 +3,5 @@ torch
 torchvision
 opencv-python
 numpy
+cv2
 pillow
