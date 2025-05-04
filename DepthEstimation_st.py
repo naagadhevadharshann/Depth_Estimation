@@ -47,19 +47,26 @@ if uploaded_file:
 
         depth_map = prediction.cpu().numpy()
         depth_map_norm = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())
-        depth_img = (depth_map_norm * 255).astype(np.uint8)
 
+        # Grayscale Plot
         st.subheader("Estimated Depth Map (Grayscale)")
-        st.image(depth_img, use_container_width=True)
+        fig_gray, ax_gray = plt.subplots()
+        gray_map = ax_gray.imshow(depth_map_norm, cmap="gray")
+        ax_gray.set_title("Grayscale Depth (Near = Bright, Far = Dark)", fontsize=12)
+        cbar_gray = plt.colorbar(gray_map, ax=ax_gray, orientation="vertical")
+        cbar_gray.set_label("Depth Intensity", rotation=270, labelpad=15)
+        cbar_gray.ax.set_yticklabels(["Far", "", "", "", "", "", "Near"])
+        st.pyplot(fig_gray)
 
+        # Heatmap Plot
         st.subheader("Estimated Depth Map (Heatmap)")
-        fig, ax = plt.subplots()
-        heatmap = ax.imshow(depth_map_norm, cmap="inferno")
-        ax.set_title("Depth Heatmap (Near = Bright, Far = Dark)", fontsize=12)
-        cbar = plt.colorbar(heatmap, ax=ax, orientation="vertical")
-        cbar.set_label("Depth Intensity", rotation=270, labelpad=15)
-        cbar.ax.set_yticklabels(["Far", "", "", "", "", "", "Near"])
-        st.pyplot(fig)
+        fig_heat, ax_heat = plt.subplots()
+        heat_map = ax_heat.imshow(depth_map_norm, cmap="inferno")
+        ax_heat.set_title("Heatmap Depth (Near = Bright, Far = Dark)", fontsize=12)
+        cbar_heat = plt.colorbar(heat_map, ax=ax_heat, orientation="vertical")
+        cbar_heat.set_label("Depth Intensity", rotation=270, labelpad=15)
+        cbar_heat.ax.set_yticklabels(["Far", "", "", "", "", "", "Near"])
+        st.pyplot(fig_heat)
 
     except Exception as e:
         st.error(f"Error processing image: {str(e)}")
