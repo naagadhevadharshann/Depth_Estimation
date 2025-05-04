@@ -4,3 +4,11 @@ torchvision
 opencv-python
 numpy
 pillow
+
+
+streamlit
+torch
+torchvision
+opencv-python
+numpy
+pillow
